@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NeonixSE</title>
+</head>
+<body>
+  <h1>NeonixSE</h1>
+  <form>
+    <input type="text" name="search" placeholder="Search...">
+    <button type="submit">Search</button>
+  </form>
+  <p>Results:</p>
+  <div id="results"></div>
+  <script>
+    const form = document.querySelector('form');
+    const searchInput = document.querySelector('input[name="search"]');
+    const resultsDiv = document.querySelector('#results');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const searchTerm = searchInput.value;
+      search(searchTerm).then(results => {
+        resultsDiv.innerHTML = '';
+        results.forEach(result => {
+          const p = document.createElement('p');
+          p.innerHTML = `<a href="${result.link}">${result.title}</a><br>${result.snippet}`;
+          resultsDiv.appendChild(p);
+        });
+      });
+    });
+
+    async function search(term) {
+      const apiKey = 'AIzaSyB8JHs4FuztNltZfYOL_fXvPsVhT71du1E';
+      const cseId = '86d21b5bf894e4c37';
+      const endpoint = `https://www.googleapis.com/customsearch/v1?key=AIzaSyB8JHs4FuztNltZfYOL_fXvPsVhT71du1E&cx=86d21b5bf894e4c37&q=${term}`;
+      const response = await fetch(endpoint);
+      return await response.json().then(data => data.items);
+    }
+  </script>
+</body>
+</html>
